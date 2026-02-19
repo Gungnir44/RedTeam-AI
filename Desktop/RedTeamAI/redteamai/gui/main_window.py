@@ -179,7 +179,9 @@ class MainWindow(QMainWindow):
 
         if not self._registry.is_available(tool_name):
             hint = self._registry.get_hint(tool_name)
-            QMessageBox.warning(self, "Tool Unavailable", f"{tool.display_name} is not available.\n\n{hint}")
+            msg = f"[{tool.display_name}] Not installed or not found in PATH.\n{hint}"
+            self._show_tool_output(tool_name, msg)
+            self._status_bar.set_status(f"{tool.display_name} not available")
             return
 
         # For built-in tools (CTF), run inline
@@ -250,6 +252,7 @@ class MainWindow(QMainWindow):
             self._recon.append_output(f"\n[{tool_name} completed with exit code {exit_code}]")
         elif active == "web_scan":
             self._web_scan.set_tool_busy(False)
+            self._web_scan.append_output(f"\n[{tool_name} completed with exit code {exit_code}]")
 
         # CVE lookup result goes to exploitation output
         if tool_name == "cve_lookup":

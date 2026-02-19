@@ -39,11 +39,14 @@ class NiktoTool(BaseTool):
             required=["target"],
         )
 
-    def execute(self, target: str, port: str = "", ssl: bool = False, timeout: int = 120, **_) -> ToolResult:
+    def get_command(self, target: str, port: str = "", ssl: bool = False, **_) -> list[str]:
         target = sanitize_target(target)
         cmd = [self._binary, "-h", target, "-nointeractive"]
         if port:
             cmd.extend(["-p", port])
         if ssl:
             cmd.append("-ssl")
-        return run_command(cmd, timeout=timeout)
+        return cmd
+
+    def execute(self, target: str, port: str = "", ssl: bool = False, timeout: int = 120, **_) -> ToolResult:
+        return run_command(self.get_command(target=target, port=port, ssl=ssl), timeout=timeout)

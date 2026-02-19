@@ -37,7 +37,9 @@ class WhatwebTool(BaseTool):
             required=["target"],
         )
 
-    def execute(self, target: str, aggression: str = "1", **_) -> ToolResult:
+    def get_command(self, target: str, aggression: str = "1", **_) -> list[str]:
         target = sanitize_target(target)
-        cmd = [self._binary, target, f"-a{aggression}", "--color=never"]
-        return run_command(cmd, timeout=60)
+        return [self._binary, target, f"-a{aggression}", "--color=never"]
+
+    def execute(self, target: str, aggression: str = "1", **_) -> ToolResult:
+        return run_command(self.get_command(target=target, aggression=aggression), timeout=60)

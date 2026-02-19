@@ -45,8 +45,8 @@ class FfufTool(BaseTool):
             required=["url", "wordlist"],
         )
 
-    def execute(self, url: str, wordlist: str, extensions: str = "",
-                filter_code: str = "404", threads: int = 40, timeout: int = 10, **_) -> ToolResult:
+    def get_command(self, url: str, wordlist: str, extensions: str = "",
+                    filter_code: str = "404", threads: int = 40, timeout: int = 10, **_) -> list[str]:
         url = sanitize_target(url)
         wordlist = sanitize_wordlist_path(wordlist)
         cmd = [self._binary, "-u", url, "-w", wordlist, "-t", str(threads),
@@ -55,4 +55,10 @@ class FfufTool(BaseTool):
             cmd.extend(["-e", extensions])
         if filter_code:
             cmd.extend(["-fc", filter_code])
-        return run_command(cmd, timeout=300)
+        return cmd
+
+    def execute(self, url: str, wordlist: str, extensions: str = "",
+                filter_code: str = "404", threads: int = 40, timeout: int = 10, **_) -> ToolResult:
+        return run_command(self.get_command(url=url, wordlist=wordlist, extensions=extensions,
+                                            filter_code=filter_code, threads=threads,
+                                            timeout=timeout), timeout=300)

@@ -45,8 +45,8 @@ class GobusterTool(BaseTool):
             required=["url", "wordlist"],
         )
 
-    def execute(self, url: str, wordlist: str, mode: str = "dir",
-                extensions: str = "", threads: int = 10, status_codes: str = "200,301,302,307", **_) -> ToolResult:
+    def get_command(self, url: str, wordlist: str, mode: str = "dir",
+                    extensions: str = "", threads: int = 10, status_codes: str = "200,301,302,307", **_) -> list[str]:
         url = sanitize_target(url)
         wordlist = sanitize_wordlist_path(wordlist)
         cmd = [self._binary, mode, "-u", url, "-w", wordlist, "-t", str(threads), "--no-error"]
@@ -54,4 +54,10 @@ class GobusterTool(BaseTool):
             cmd.extend(["-x", extensions])
         if status_codes:
             cmd.extend(["-s", status_codes])
-        return run_command(cmd, timeout=300)
+        return cmd
+
+    def execute(self, url: str, wordlist: str, mode: str = "dir",
+                extensions: str = "", threads: int = 10, status_codes: str = "200,301,302,307", **_) -> ToolResult:
+        return run_command(self.get_command(url=url, wordlist=wordlist, mode=mode,
+                                            extensions=extensions, threads=threads,
+                                            status_codes=status_codes), timeout=300)

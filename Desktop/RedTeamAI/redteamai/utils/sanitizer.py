@@ -19,12 +19,16 @@ def sanitize_target(target: str) -> str:
     target = target.strip()
     if len(target) > 255:
         raise ValueError("Target too long")
+    # Strip URL fragment (#...) — CLI tools don't understand fragments and
+    # some (e.g. nikto, whatweb) will fail or behave unexpectedly with them.
+    if "#" in target:
+        target = target.split("#")[0].rstrip("/")
     if _DANGEROUS_CHARS.search(target):
         raise ValueError(f"Target contains dangerous characters: {target!r}")
     # Allow IPs, hostnames, URLs with specific scheme
     if target.startswith(("http://", "https://")):
         # Minimal URL validation
-        safe = re.compile(r'^https?://[a-zA-Z0-9.\-_:/\[\]@%?=&#+]+$')
+        safe = re.compile(r'^https?://[a-zA-Z0-9.\-_:/\[\]@%?=&+]+$')
         if not safe.match(target):
             raise ValueError(f"Unsafe URL: {target!r}")
     return target
