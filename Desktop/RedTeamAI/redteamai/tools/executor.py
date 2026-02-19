@@ -1,11 +1,14 @@
 """Synchronous subprocess executor used by QThread and direct calls."""
 from __future__ import annotations
+import sys
 import subprocess
 import time
 from redteamai.tools.base import ToolResult
 from redteamai.utils.logger import get_logger
 
 log = get_logger(__name__)
+
+_HIDE_WINDOW = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 
 
 def run_command(
@@ -27,6 +30,7 @@ def run_command(
             timeout=timeout,
             cwd=cwd,
             env=env,
+            creationflags=_HIDE_WINDOW,
         )
         elapsed = time.monotonic() - start
         output = result.stdout or ""

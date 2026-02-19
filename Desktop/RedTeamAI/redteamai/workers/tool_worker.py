@@ -1,5 +1,6 @@
 """QThread that runs subprocess tools with live output streaming."""
 from __future__ import annotations
+import sys
 import subprocess
 import time
 from PyQt6.QtCore import QThread
@@ -7,6 +8,8 @@ from redteamai.workers.worker_signals import ToolWorkerSignals
 from redteamai.utils.logger import get_logger
 
 log = get_logger(__name__)
+
+_HIDE_WINDOW = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 
 
 class ToolWorker(QThread):
@@ -36,6 +39,7 @@ class ToolWorker(QThread):
                 errors="replace",
                 cwd=self.cwd,
                 bufsize=1,  # Line-buffered
+                creationflags=_HIDE_WINDOW,
             )
         except FileNotFoundError as e:
             msg = f"[Error] Tool not found: {self.command[0]}\n{e}"
