@@ -1,0 +1,51 @@
+# RedTeam AI Default Configuration
+# This file is auto-generated. Edit values as needed.
+
+ai_backend = "ollama"
+nav_expanded = true
+ai_panel_width = 380
+theme = "dark"
+font_size = 13
+max_agent_iterations = 10
+require_confirm_dangerous = true
+auto_save_session = true
+nvd_api_key = ""
+
+[ollama]
+host = "http://localhost:11434"
+model = "llama3.1:8b"
+timeout = 120
+use_xml_fallback = true
+
+[groq]
+api_key = ""
+model = "llama3-70b-8192"
+timeout = 60
+
+[anthropic]
+api_key = ""
+model = "claude-sonnet-4-5-20250929"
+timeout = 120
+max_tokens = 4096
+
+[openai_compat]
+api_key = ""
+base_url = "https://api.openai.com/v1"
+model = "gpt-4o-mini"
+timeout = 120
+
+[tools]
+nmap = "nmap"
+whois = "whois"
+dig = "dig"
+gobuster = "gobuster"
+ffuf = "ffuf"
+nikto = "nikto"
+whatweb = "whatweb"
+theharvester = "theHarvester"
+subfinder = "subfinder"
+searchsploit = "searchsploit"
+metasploit_rpc_host = "127.0.0.1"
+metasploit_rpc_port = 55553
+metasploit_rpc_password = ""
+wsl_path = "wsl"

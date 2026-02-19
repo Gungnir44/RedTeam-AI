@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "redteamai"
+version = "0.1.0"
+description = "AI-powered Red Team desktop application for CTF and authorized pentesting"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "RedTeam AI Project" }]
+keywords = ["security", "pentesting", "CTF", "AI", "red team"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Information Technology",
+    "Topic :: Security",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "PyQt6>=6.6.0",
+    "anthropic>=0.73.0",
+    "httpx>=0.28.0",
+    "openai>=1.50.0",
+    "SQLAlchemy>=2.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "tomlkit>=0.12.0",
+    "Jinja2>=3.1.0",
+    "reportlab>=4.0.0",
+    "Pygments>=2.17.0",
+    "python-nmap>=0.7.1",
+    "nest-asyncio>=1.6.0",
+]
+
+[project.scripts]
+redteamai = "main:main"
+
+[project.urls]
+Homepage = "https://github.com/your-org/redteamai"
+Repository = "https://github.com/your-org/redteamai"
+Issues = "https://github.com/your-org/redteamai/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["redteamai*"]
+
+[tool.setuptools.package-data]
+"redteamai.gui.styles" = ["*.qss"]
+"redteamai.config" = ["*.toml"]
+"assets" = ["icons/*", "fonts/*"]

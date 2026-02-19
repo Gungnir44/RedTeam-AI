@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.spec
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# App data (user-specific, not project files)
+*.db
+*.db-wal
+*.db-shm
+*.log
+config.toml
+
+# PyInstaller
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets / keys — never commit these
+*.key
+*.pem
+*.env
+secrets.toml
