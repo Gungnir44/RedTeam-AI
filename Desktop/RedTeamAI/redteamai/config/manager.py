@@ -25,8 +25,9 @@ def load_config() -> AppSettings:
     if CONFIG_FILE.exists():
         try:
             raw = tomlkit.loads(CONFIG_FILE.read_text(encoding="utf-8"))
-            flat = _flatten_toml(raw)
-            return AppSettings(**flat)
+            # Convert tomlkit tables to plain dicts so pydantic can coerce nested models
+            plain = _toml_to_plain_dict(raw)
+            return AppSettings(**plain)
         except Exception:
             pass
 
@@ -44,15 +45,14 @@ def save_config(settings: AppSettings) -> None:
     CONFIG_FILE.write_text(tomlkit.dumps(doc), encoding="utf-8")
 
 
-def _flatten_toml(d: dict, prefix: str = "") -> dict:
-    """Flatten nested TOML dict to flat dict (pydantic-settings compatible)."""
-    result: dict[str, Any] = {}
+def _toml_to_plain_dict(d) -> dict:
+    """Recursively convert a tomlkit document/table to a plain Python dict."""
+    result = {}
     for k, v in d.items():
-        key = f"{prefix}{k}" if not prefix else f"{prefix}.{k}"
-        if isinstance(v, dict):
-            result.update(_flatten_toml(v, key))
+        if hasattr(v, "items"):
+            result[k] = _toml_to_plain_dict(v)
         else:
-            result[k if not prefix else key] = v
+            result[k] = v
     return result
 
 

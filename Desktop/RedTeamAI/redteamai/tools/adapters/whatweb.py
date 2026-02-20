@@ -3,6 +3,7 @@ from __future__ import annotations
 from redteamai.tools.base import BaseTool, ToolResult
 from redteamai.tools.executor import run_command
 from redteamai.utils.sanitizer import sanitize_target
+from redteamai.utils.platform_utils import smart_wrap
 from redteamai.ai.tool_manifest import build_tool_schema, string_param
 
 
@@ -39,7 +40,8 @@ class WhatwebTool(BaseTool):
 
     def get_command(self, target: str, aggression: str = "1", **_) -> list[str]:
         target = sanitize_target(target)
-        return [self._binary, target, f"-a{aggression}", "--color=never"]
+        cmd = [self._binary, target, f"-a{aggression}", "--color=never"]
+        return smart_wrap(self._binary, cmd)
 
     def execute(self, target: str, aggression: str = "1", **_) -> ToolResult:
         return run_command(self.get_command(target=target, aggression=aggression), timeout=60)

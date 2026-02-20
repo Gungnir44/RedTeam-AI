@@ -84,6 +84,13 @@ def wsl_wrap(cmd: list[str]) -> list[str]:
     return cmd
 
 
+def smart_wrap(binary: str, cmd: list[str]) -> list[str]:
+    """Wrap command with WSL only if the binary isn't natively in Windows PATH."""
+    if IS_WINDOWS and not shutil.which(binary) and has_wsl():
+        return ["wsl"] + cmd
+    return cmd
+
+
 def get_platform_info() -> dict:
     return {
         "os": platform.system(),

@@ -3,6 +3,7 @@ from __future__ import annotations
 from redteamai.tools.base import BaseTool, ToolResult
 from redteamai.tools.executor import run_command
 from redteamai.utils.sanitizer import sanitize_target
+from redteamai.utils.platform_utils import smart_wrap
 from redteamai.ai.tool_manifest import build_tool_schema, string_param, integer_param, boolean_param
 
 
@@ -46,7 +47,7 @@ class NiktoTool(BaseTool):
             cmd.extend(["-p", port])
         if ssl:
             cmd.append("-ssl")
-        return cmd
+        return smart_wrap(self._binary, cmd)
 
     def execute(self, target: str, port: str = "", ssl: bool = False, timeout: int = 120, **_) -> ToolResult:
         return run_command(self.get_command(target=target, port=port, ssl=ssl), timeout=timeout)
